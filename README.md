@@ -33,7 +33,9 @@ function divideAndSquareRoot(
     });
   }
 
-  if (num < 0 || divisor < 0) {
+  const dividedNum = num / divisor;
+
+  if (dividedNum < 0) {
     return new LastErr("UNSUPPORTED_COMPLEX_NUMBERS", {
       message: "does not support complex numbers",
       cause: {
@@ -43,7 +45,7 @@ function divideAndSquareRoot(
     });
   }
 
-  return Math.sqrt(num / divisor);
+  return Math.sqrt(dividedNum);
 }
 
 const result = divideAndSquareRoot(1, 0);
