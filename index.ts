@@ -6,7 +6,7 @@ interface LastErrOptions<Cause = never> {
 export class LastErr<Code extends string, Cause = never> extends Error {
   code: Code;
 
-  // @ts-expect-error [TS2564]
+  // @ts-ignore: cause may not exist
   cause: Cause;
 
   constructor(
