@@ -1,0 +1,9 @@
+{
+  "$schema": "https://jsr.io/schema/config-file.v1.json",
+  "name": "@naas/last-err",
+  "version": "1.0.0",
+  "exports": "./index.ts",
+  "publish": {
+    "include": ["index.ts"]
+  }
+}
