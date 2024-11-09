@@ -13,6 +13,9 @@ npx jsr add @naas/last-err
 
 # for pnpm
 pnpm dlx jsr add @naas/last-err
+
+# by npm
+npm install @nakanoasaservice/last-err
 ```
 
 ## Usage
