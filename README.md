@@ -40,7 +40,7 @@ function divideAndSquareRoot(
 
   if (dividedNum < 0) {
     return new LastErr("UNSUPPORTED_COMPLEX_NUMBERS", {
-      message: "does not support complex numbers",
+      message: "Complex numbers are not supported",
       cause: {
         num,
         divisor,
