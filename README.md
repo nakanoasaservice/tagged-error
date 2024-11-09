@@ -50,7 +50,7 @@ const result = divideAndSquareRoot(1, 0);
 
 /*
   You can't use the result as a number because it might be an error.
- */
+*/
 
 // Check if the result is an error
 if (result instanceof LastErr) {
