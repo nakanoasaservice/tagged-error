@@ -7,6 +7,8 @@
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "cSpell.words": [
+    "deno",
+    "instanceof",
     "naas"
   ]
 }
