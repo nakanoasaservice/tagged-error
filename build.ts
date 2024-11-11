@@ -2,8 +2,8 @@ import { build, emptyDir } from "@deno/dnt";
 
 await emptyDir("./dist");
 
-const jsrJson = await Deno.readTextFile("./jsr.json");
-const jsr: { version: string } = JSON.parse(jsrJson);
+const jsrJson = await Deno.readTextFile("./deno.json");
+const config: { version: string } = JSON.parse(jsrJson);
 
 await build({
   entryPoints: ["./index.ts"],
@@ -15,7 +15,7 @@ await build({
   package: {
     // package.json properties
     name: "@nakanoasaservice/last-err",
-    version: jsr.version,
+    version: config.version,
     description: "Typing errors without custom error class.",
     license: "MIT",
     repository: {
