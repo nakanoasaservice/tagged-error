@@ -1,4 +1,14 @@
 {
+  "name": "@naas/last-err",
+  "version": "1.0.5",
+  "exports": "./index.ts",
+  "publish": {
+    "include": [
+      "LICENSE",
+      "README.md",
+      "index.ts"
+    ]
+  },
   "imports": {
     "@deno/dnt": "jsr:@deno/dnt@^0.41.3"
   }
