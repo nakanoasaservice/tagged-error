@@ -4,6 +4,21 @@ Typing errors without custom error class.
 
 ## Installation
 
+### via npm
+
+```bash
+# for npm
+npm i @nakanoasaservice/last-err
+
+# for pnpm
+pnpm i @nakanoasaservice/last-err
+
+# for yarn
+yarn add @nakanoasaservice/last-err
+```
+
+### via jsr (esm only)
+
 ```bash
 # for deno
 deno add jsr:@naas/last-err
@@ -13,9 +28,6 @@ npx jsr add @naas/last-err
 
 # for pnpm
 pnpm dlx jsr add @naas/last-err
-
-# by npm
-npm install @nakanoasaservice/last-err
 ```
 
 ## Usage
