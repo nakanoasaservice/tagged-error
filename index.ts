@@ -5,8 +5,6 @@ interface LastErrOptions<Cause = never> {
 
 export class LastErr<Code extends string, Cause = never> extends Error {
   code: Code;
-
-  // @ts-ignore [TS2564] cause may not exists
   override cause: Cause;
 
   constructor(

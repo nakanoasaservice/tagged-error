@@ -9,6 +9,12 @@
       "index.ts"
     ]
   },
+  "compilerOptions": {
+    "strictPropertyInitialization": false,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
+  },
   "imports": {
     "@deno/dnt": "jsr:@deno/dnt@^0.41.3"
   }
