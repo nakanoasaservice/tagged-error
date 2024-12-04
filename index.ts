@@ -1,24 +1,24 @@
-interface LastErrOptions<Cause = never> {
+interface TaggedErrOptions<Cause = never> {
   message?: string;
   cause?: Cause;
 }
 
-export class LastErr<Code extends string, Cause = never> extends Error {
-  code: Code;
+export class TaggedErr<Tag extends string, Cause = never> extends Error {
+  tag: Tag;
   override cause: Cause;
 
   constructor(
-    code: Code,
-    options: LastErrOptions<Cause> | undefined = undefined,
+    tag: Tag,
+    options: TaggedErrOptions<Cause> | undefined = undefined,
   ) {
     super(options?.message);
 
-    this.code = code;
+    this.tag = tag;
 
     if (options?.cause) {
       this.cause = options.cause;
     }
 
-    this.name = `LastErr('${code}')`;
+    this.name = `TaggedErr('${tag}')`;
   }
 }

@@ -14,16 +14,16 @@ await build({
 
   package: {
     // package.json properties
-    name: "@nakanoasaservice/last-err",
+    name: "@nakanoasaservice/tagged-err",
     version: config.version,
     description: "Typing errors without custom error class.",
     license: "MIT",
     repository: {
       type: "git",
-      url: "git://github.com/nakanoasaservice/last-err.git",
+      url: "git://github.com/nakanoasaservice/tagged-err.git",
     },
     bugs: {
-      url: "https://github.com/nakanoasaservice/last-err/issues",
+      url: "https://github.com/nakanoasaservice/tagged-err/issues",
     },
   },
   postBuild() {
