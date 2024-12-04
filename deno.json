@@ -1,6 +1,6 @@
 {
   "version": "1.0.5",
-  "name": "@naas/tagged-err",
+  "name": "@naas/tagged-error",
   "exports": "./index.ts",
   "publish": {
     "include": [

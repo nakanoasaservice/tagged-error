@@ -8,42 +8,45 @@ Typing errors without custom error class.
 
 ```bash
 # for npm
-npm i @nakanoasaservice/tagged-err
+npm i @nakanoasaservice/tagged-error
 
 # for pnpm
-pnpm i @nakanoasaservice/tagged-err
+pnpm i @nakanoasaservice/tagged-error
 
 # for yarn
-yarn add @nakanoasaservice/tagged-err
+yarn add @nakanoasaservice/tagged-error
 ```
 
 ### via jsr (esm only)
 
 ```bash
 # for deno
-deno add jsr:@naas/tagged-err
+deno add jsr:@naas/tagged-error
 
 # for npm
-npx jsr add @naas/tagged-err
+npx jsr add @naas/tagged-error
 
 # for pnpm
-pnpm dlx jsr add @naas/tagged-err
+pnpm dlx jsr add @naas/tagged-error
 ```
 
 ## Usage
 
 ```ts
-import { TaggedErr } from "@naas/tagged-err";
+import { TaggedError } from "@naas/tagged-error";
 
 function divideAndSquareRoot(
   num: number,
   divisor: number,
 ):
   | number /* You don't have to write the return type because it's inferred */
-  | TaggedErr<"DIVISOR_IS_ZERO">
-  | TaggedErr<"UNSUPPORTED_COMPLEX_NUMBERS", { num: number; divisor: number }> {
+  | TaggedError<"DIVISOR_IS_ZERO">
+  | TaggedError<
+    "UNSUPPORTED_COMPLEX_NUMBERS",
+    { num: number; divisor: number }
+  > {
   if (divisor === 0) {
-    return new TaggedErr("DIVISOR_IS_ZERO", {
+    return new TaggedError("DIVISOR_IS_ZERO", {
       message: "Divisor is zero",
     });
   }
@@ -51,7 +54,7 @@ function divideAndSquareRoot(
   const dividedNum = num / divisor;
 
   if (dividedNum < 0) {
-    return new TaggedErr("UNSUPPORTED_COMPLEX_NUMBERS", {
+    return new TaggedError("UNSUPPORTED_COMPLEX_NUMBERS", {
       message: "Complex numbers are not supported",
       cause: {
         num,
@@ -70,7 +73,7 @@ const result = divideAndSquareRoot(1, 0);
 */
 
 // Check if the result is an error
-if (result instanceof TaggedErr) {
+if (result instanceof TaggedError) {
   if (result.tag === "DIVISOR_IS_ZERO") {
     console.log("Divisor is zero");
     return;
