@@ -8,32 +8,32 @@ Typing errors without custom error class.
 
 ```bash
 # for npm
-npm i @nakanoasaservice/tagged-error
+npm i @nakanoaas/tagged-error
 
 # for pnpm
-pnpm i @nakanoasaservice/tagged-error
+pnpm i @nakanoaas/tagged-error
 
 # for yarn
-yarn add @nakanoasaservice/tagged-error
+yarn add @nakanoaas/tagged-error
 ```
 
 ### via jsr (esm only)
 
 ```bash
 # for deno
-deno add jsr:@naas/tagged-error
+deno add jsr:@nakanoaas/tagged-error
 
 # for npm
-npx jsr add @naas/tagged-error
+npx jsr add @nakanoaas/tagged-error
 
 # for pnpm
-pnpm dlx jsr add @naas/tagged-error
+pnpm dlx jsr add @nakanoaas/tagged-error
 ```
 
 ## Usage
 
 ```ts
-import { TaggedError } from "@naas/tagged-error";
+import { TaggedError } from "@nakanoaas/tagged-error";
 
 function divideAndSquareRoot(
   num: number,
