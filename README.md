@@ -1,4 +1,4 @@
-# Tagged Err
+# Tagged Error
 
 Typing errors without custom error class.
 
