@@ -1,94 +1,121 @@
 # Tagged Error
 
-A type-safe error handling solution without custom error classes.
+🏷️ Type-safe error handling in TypeScript without the hassle of custom error
+classes.
+
+[![npm version](https://badge.fury.io/js/@nakanoaas%2Ftagged-error.svg)](https://www.npmjs.com/package/@nakanoaas/tagged-error)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Features
+
+- 🎯 **Type-safe**: Full TypeScript support with type inference
+- 🪶 **Lightweight**: Zero dependencies, minimal code
+- 🔍 **Easy debugging**: Clear error messages with structured data
+- 💡 **Simple API**: No need to create custom error classes
 
 ## Installation
 
-### via npm
+Choose your preferred package manager:
 
 ```bash
-# using npm
-npm i @nakanoaas/tagged-error
-
-# using pnpm
-pnpm i @nakanoaas/tagged-error
-
-# using yarn
-yarn add @nakanoaas/tagged-error
+npm install @nakanoaas/tagged-error    # npm
+pnpm add @nakanoaas/tagged-error       # pnpm
+yarn add @nakanoaas/tagged-error       # yarn
 ```
 
-### via jsr (ESM only)
+For Deno users (ESM only):
 
 ```bash
-# using deno
-deno add jsr:@nakanoaas/tagged-error
-
-# using npm
-npx jsr add @nakanoaas/tagged-error
-
-# using pnpm
-pnpm dlx jsr add @nakanoaas/tagged-error
+deno add jsr:@nakanoaas/tagged-error   # deno
+npx jsr add @nakanoaas/tagged-error    # npm
+pnpm dlx jsr add @nakanoaas/tagged-error # pnpm
 ```
 
-## Usage
+## Quick Start
 
-```ts
+```typescript
 import { TaggedError } from "@nakanoaas/tagged-error";
 
-function divideAndSquareRoot(
-  num: number,
-  divisor: number,
-):
-  | number // The return type is inferred, so this type annotation is optional
-  | TaggedError<"DIVISOR_IS_ZERO">
-  | TaggedError<
-    "UNSUPPORTED_COMPLEX_NUMBERS",
-    { num: number; divisor: number }
-  > {
+// Example: A function that might fail in different ways
+function divideAndSquareRoot(num: number, divisor: number) {
   if (divisor === 0) {
     return new TaggedError("DIVISOR_IS_ZERO", {
-      message: "Divisor is zero",
+      message: "Cannot divide by zero",
     });
   }
 
-  const dividedNum = num / divisor;
+  const result = num / divisor;
 
-  if (dividedNum < 0) {
-    return new TaggedError("UNSUPPORTED_COMPLEX_NUMBERS", {
-      message: "Complex numbers are not supported",
-      cause: {
-        num,
-        divisor,
-      },
+  if (result < 0) {
+    return new TaggedError("NEGATIVE_RESULT", {
+      message: "Cannot calculate square root of negative number",
+      cause: { value: result },
     });
   }
 
-  return Math.sqrt(dividedNum);
+  return Math.sqrt(result);
 }
 
-const result = divideAndSquareRoot(1, 0);
+// Using the function
+const result = divideAndSquareRoot(10, 0);
 
-/*
-  You can't use the result as a number because it might be an error.
-*/
-
-// Check if the result is an error
+// Type-safe error handling
 if (result instanceof TaggedError) {
-  if (result.tag === "DIVISOR_IS_ZERO") {
-    console.log("Divisor is zero");
-    return;
+  switch (result.tag) {
+    case "DIVISOR_IS_ZERO":
+      console.error("Division by zero error:", result.message);
+      break;
+    case "NEGATIVE_RESULT":
+      console.error(
+        "Negative result error:",
+        result.message,
+        "Value:",
+        result.cause.value,
+      );
+      break;
   }
+} else {
+  console.log("Result:", result); // result is typed as number
+}
+```
 
-  if (result.tag === "UNSUPPORTED_COMPLEX_NUMBERS") {
-    console.log("Unsupported complex numbers");
+## Why Tagged Error?
 
-    // You can access the typed cause
-    console.log("number: ", result.cause.num);
-    console.log("divisor: ", result.cause.divisor);
-    return;
+Traditional error handling in TypeScript often involves creating multiple error
+classes or using string literals. Tagged Error provides a simpler approach:
+
+```typescript
+// ❌ Traditional approach - lots of boilerplate
+class DivisorZeroError extends Error {
+  constructor() {
+    super("Cannot divide by zero");
   }
 }
 
-// Now you can use the result as a number
-console.log("Result * 2 = ", result * 2);
+// ✅ Tagged Error approach - clean and type-safe
+return new TaggedError("DIVISOR_IS_ZERO", {
+  message: "Cannot divide by zero",
+});
 ```
+
+## API Reference
+
+### `TaggedError<Tag, Cause>`
+
+```typescript
+new TaggedError(tag: string, options?: {
+  message?: string;
+  cause?: any;
+})
+```
+
+#### Parameters
+
+- `tag`: A string literal that identifies the error type
+- `options`: Optional configuration object
+  - `message`: Human-readable error message
+  - `cause`: Additional error context data
+
+## License
+
+MIT © [nakanoaas](https://github.com/nakanoaas)
