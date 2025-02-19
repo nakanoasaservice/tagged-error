@@ -1,32 +1,32 @@
 # Tagged Error
 
-Typing errors without custom error class.
+A type-safe error handling solution without custom error classes.
 
 ## Installation
 
 ### via npm
 
 ```bash
-# for npm
+# using npm
 npm i @nakanoaas/tagged-error
 
-# for pnpm
+# using pnpm
 pnpm i @nakanoaas/tagged-error
 
-# for yarn
+# using yarn
 yarn add @nakanoaas/tagged-error
 ```
 
-### via jsr (esm only)
+### via jsr (ESM only)
 
 ```bash
-# for deno
+# using deno
 deno add jsr:@nakanoaas/tagged-error
 
-# for npm
+# using npm
 npx jsr add @nakanoaas/tagged-error
 
-# for pnpm
+# using pnpm
 pnpm dlx jsr add @nakanoaas/tagged-error
 ```
 
@@ -39,7 +39,7 @@ function divideAndSquareRoot(
   num: number,
   divisor: number,
 ):
-  | number /* You don't have to write the return type because it's inferred */
+  | number // The return type is inferred, so this type annotation is optional
   | TaggedError<"DIVISOR_IS_ZERO">
   | TaggedError<
     "UNSUPPORTED_COMPLEX_NUMBERS",

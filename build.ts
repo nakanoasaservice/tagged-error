@@ -24,7 +24,8 @@ await build({
     // package.json properties
     name: config.name,
     version: config.version,
-    description: "Typing errors without custom error class.",
+    description:
+      "A type-safe error handling solution without custom error classes.",
     license: "MIT",
     repository: {
       type: "git",
