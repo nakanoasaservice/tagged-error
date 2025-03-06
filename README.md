@@ -118,4 +118,4 @@ new TaggedError(tag: string, options?: {
 
 ## License
 
-MIT © [nakanoaas](https://github.com/nakanoaas)
+MIT © [Nakano as a Service](https://github.com/nakanoasaservice)

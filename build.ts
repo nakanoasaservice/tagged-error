@@ -5,6 +5,7 @@ await emptyDir("./dist");
 interface Config {
   name: string;
   version: string;
+  license: string;
   compilerOptions: { [key: string]: boolean };
 }
 
@@ -24,9 +25,9 @@ await build({
     // package.json properties
     name: config.name,
     version: config.version,
+    license: config.license,
     description:
       "A type-safe error handling solution without custom error classes.",
-    license: "MIT",
     repository: {
       type: "git",
       url: "git://github.com/nakanoasaservice/tagged-error.git",
