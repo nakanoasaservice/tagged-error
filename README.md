@@ -4,6 +4,7 @@
 classes.
 
 [![npm version](https://badge.fury.io/js/@nakanoaas%2Ftagged-error.svg)](https://www.npmjs.com/package/@nakanoaas/tagged-error)
+[![JSR Version](https://jsr.io/badges/@nakanoaas/tagged-error)](https://jsr.io/@nakanoaas/tagged-error)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Features
