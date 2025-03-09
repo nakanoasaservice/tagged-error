@@ -19,6 +19,7 @@ await build({
     deno: true,
   },
 
+  test: false,
   compilerOptions: config.compilerOptions,
 
   package: {

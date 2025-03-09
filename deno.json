@@ -3,6 +3,9 @@
   "name": "@nakanoaas/tagged-error",
   "license": "MIT",
   "exports": "./index.ts",
+  "tasks": {
+    "build": "deno run -A build.ts"
+  },
   "publish": {
     "include": [
       "LICENSE",
