@@ -39,7 +39,7 @@ export class TaggedError<Tag extends string, Cause = never> extends Error {
    */
   constructor(
     tag: Tag,
-    options: TaggedErrorOptions<Cause> | undefined = undefined,
+    options?: TaggedErrorOptions<Cause>,
   ) {
     super(options?.message);
 
