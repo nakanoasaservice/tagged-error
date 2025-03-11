@@ -26,14 +26,15 @@ export class TaggedError<Tag extends string, Cause = never> extends Error {
    * @param options - Optional configuration options
    * @example
    * ```ts
+   * // Create a simple tagged error
    * const error = new TaggedError("NOT_FOUND", {
-   *   message: "Resource not found",
-   *   cause: { field: "email", value: "invalid" },
+   *   message: "Resource not found"
    * });
    *
-   * const error = new TaggedError("NOT_FOUND", {
-   *   message: "Resource not found",
-   *   cause: { field: "email", value: "invalid" },
+   * // Create a tagged error with cause data
+   * const error = new TaggedError("VALIDATION_ERROR", {
+   *   message: "Invalid input",
+   *   cause: { field: "email", value: "invalid" }
    * });
    * ```
    */
