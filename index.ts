@@ -13,19 +13,6 @@ interface TaggedErrorOptions<Cause = never> {
  * A type-safe error class that includes a tag and optional cause data
  * @template Tag - The literal string type of the error tag
  * @template Cause - The type of the cause data
- * @example
- * ```ts
- * // Create a simple tagged error
- * const error = new TaggedError("NOT_FOUND", {
- *   message: "Resource not found"
- * });
- *
- * // Create a tagged error with cause data
- * const error = new TaggedError("VALIDATION_ERROR", {
- *   message: "Invalid input",
- *   cause: { field: "email", value: "invalid" }
- * });
- * ```
  */
 export class TaggedError<Tag extends string, Cause = never> extends Error {
   /** The tag identifying the type of error */
@@ -33,6 +20,23 @@ export class TaggedError<Tag extends string, Cause = never> extends Error {
   /** The cause data associated with the error */
   override cause: Cause;
 
+  /**
+   * Creates a new TaggedError instance
+   * @param tag - The tag identifying the type of error
+   * @param options - Optional configuration options
+   * @example
+   * ```ts
+   * const error = new TaggedError("NOT_FOUND", {
+   *   message: "Resource not found",
+   *   cause: { field: "email", value: "invalid" },
+   * });
+   *
+   * const error = new TaggedError("NOT_FOUND", {
+   *   message: "Resource not found",
+   *   cause: { field: "email", value: "invalid" },
+   * });
+   * ```
+   */
   constructor(
     tag: Tag,
     options: TaggedErrorOptions<Cause> | undefined = undefined,
