@@ -45,11 +45,10 @@ export class TaggedError<Tag extends string, Cause = never> extends Error {
     super(options?.message);
 
     this.tag = tag;
+    this.name = `TaggedError('${tag}')`;
 
     if (options?.cause) {
       this.cause = options.cause;
     }
-
-    this.name = `TaggedError('${tag}')`;
   }
 }
