@@ -13,6 +13,23 @@ interface TaggedErrorOptions<Cause = never> {
  * A type-safe error class that includes a tag and optional cause data
  * @template Tag - The literal string type of the error tag
  * @template Cause - The type of the cause data
+ * @example
+ * ```ts
+ * const result = divideAndSquareRoot(10, 0);
+ *
+ * if (result instanceof TaggedError) {
+ *   switch (result.tag) {
+ *     case "DIVIDE_BY_ZERO":
+ *       console.log("Cannot divide by zero");
+ *       break;
+ *     case "NEGATIVE_RESULT":
+ *       console.log(`Cannot square root ${result.cause.value}`);
+ *       break;
+ *   }
+ * } else {
+ *   console.log("Result:", result); // result is typed as number
+ * }
+ * ```
  */
 export class TaggedError<Tag extends string, Cause = never> extends Error {
   /** The tag identifying the type of error */
@@ -27,12 +44,12 @@ export class TaggedError<Tag extends string, Cause = never> extends Error {
    * @example
    * ```ts
    * // Create a simple tagged error
-   * const error = new TaggedError("NOT_FOUND", {
+   * return new TaggedError("NOT_FOUND", {
    *   message: "Resource not found"
    * });
    *
    * // Create a tagged error with cause data
-   * const error = new TaggedError("VALIDATION_ERROR", {
+   * return new TaggedError("VALIDATION_ERROR", {
    *   message: "Invalid input",
    *   cause: { field: "email", value: "invalid" }
    * });
