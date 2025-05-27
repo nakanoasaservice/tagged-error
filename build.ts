@@ -20,7 +20,10 @@ await build({
   },
 
   test: false,
-  compilerOptions: config.compilerOptions,
+  compilerOptions: {
+    ...config.compilerOptions,
+    target: "Latest",
+  },
 
   package: {
     // package.json properties
