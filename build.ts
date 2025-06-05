@@ -30,6 +30,7 @@ await build({
     name: config.name,
     version: config.version,
     license: config.license,
+    sideEffects: false,
     description:
       "A type-safe error handling solution without custom error classes.",
     repository: {
