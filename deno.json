@@ -1,5 +1,5 @@
 {
-  "version": "0.1.6",
+  "version": "0.1.7",
   "name": "@nakanoaas/tagged-error",
   "license": "MIT",
   "exports": "./index.ts",
@@ -17,7 +17,8 @@
     "strictPropertyInitialization": false,
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "lib": ["deno.ns", "es2022"]
   },
   "imports": {
     "@deno/dnt": "jsr:@deno/dnt@^0.42.1"
