@@ -2,7 +2,7 @@
  * Options for creating a TaggedError
  * @template Cause - The type of the cause data
  */
-interface TaggedErrorOptions<Cause = never> {
+interface TaggedErrorOptions<Cause = undefined> {
   /** Optional error message */
   message?: string;
   /** Optional cause data */
@@ -31,7 +31,7 @@ interface TaggedErrorOptions<Cause = never> {
  * }
  * ```
  */
-export class TaggedError<Tag extends string, Cause = never> extends Error {
+export class TaggedError<Tag extends string, Cause = undefined> extends Error {
   /** The tag identifying the type of error */
   tag: Tag;
   /** The cause data associated with the error */

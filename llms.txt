@@ -40,7 +40,7 @@ Tagged Error is a TypeScript library that provides type-safe error handling with
 
 ## Type Parameters
 - `Tag extends string`: The literal string type of the error tag
-- `Cause = never`: The type of the cause data (optional)
+- `Cause = undefined`: The type of the cause data (optional)
 
 ## Constructor
 ```typescript

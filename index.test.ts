@@ -75,7 +75,7 @@ describe("TaggedError in practice", () => {
       result.message,
       "Cannot calculate square root of negative number",
     );
-    assertEquals(result.cause.value, -10);
+    assertEquals(result.cause?.value, -10);
   });
 });
 
