@@ -1,5 +1,5 @@
-import { assertEquals, assertInstanceOf } from "jsr:@std/assert";
-import { describe, it } from "jsr:@std/testing/bdd";
+import { assertEquals, assertInstanceOf } from "@std/assert";
+import { describe, it } from "@std/testing/bdd";
 import { TaggedError } from "./index.ts";
 
 Deno.test("TaggedError - basic instantiation", () => {
