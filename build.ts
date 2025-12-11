@@ -32,11 +32,12 @@ await build({
     version: config.version,
     license: config.license,
     sideEffects: false,
+    type: "module",
     description:
       "A type-safe error handling solution without custom error classes.",
     repository: {
       type: "git",
-      url: "git://github.com/nakanoasaservice/tagged-error.git",
+      url: "git+https://github.com/nakanoasaservice/tagged-error.git",
     },
     bugs: {
       url: "https://github.com/nakanoasaservice/tagged-error/issues",
