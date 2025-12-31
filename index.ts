@@ -64,7 +64,7 @@ export class TaggedError<Tag extends string, Cause = undefined> extends Error {
     this.tag = tag;
     this.name = `TaggedError('${tag}')`;
 
-    if (options?.cause) {
+    if (options?.cause !== undefined) {
       this.cause = options.cause;
     }
   }
