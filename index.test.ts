@@ -33,6 +33,29 @@ Deno.test("TaggedError - with cause data", () => {
   assertEquals(error.cause, causeData);
 });
 
+Deno.test("TaggedError - should set falsy cause values (0/empty string/false/null)", () => {
+  const errorWithZero = new TaggedError("CAUSE_ZERO", { cause: 0 });
+  assertEquals(errorWithZero.cause, 0);
+
+  const errorWithEmptyString = new TaggedError("CAUSE_EMPTY_STRING", {
+    cause: "",
+  });
+  assertEquals(errorWithEmptyString.cause, "");
+
+  const errorWithFalse = new TaggedError("CAUSE_FALSE", { cause: false });
+  assertEquals(errorWithFalse.cause, false);
+
+  const errorWithNull = new TaggedError<"CAUSE_NULL", null>("CAUSE_NULL", {
+    cause: null,
+  });
+  assertEquals(errorWithNull.cause, null);
+});
+
+Deno.test("TaggedError - should not set cause when cause is undefined", () => {
+  const error = new TaggedError("CAUSE_UNDEFINED", { cause: undefined });
+  assertEquals(error.cause, undefined);
+});
+
 describe("TaggedError in practice", () => {
   function divideAndSquareRoot(num: number, divisor: number) {
     if (divisor === 0) {
