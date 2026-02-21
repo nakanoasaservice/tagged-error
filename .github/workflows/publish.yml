@@ -1,9 +1,7 @@
 name: Publish
 
 on:
-  pull_request:
-    types: [closed]
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -12,9 +10,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: |
-      github.event.pull_request.merged == true &&
-      github.event.pull_request.head.ref == 'release'
+    if: github.ref == 'refs/heads/main'
     environment: production
     steps:
       - uses: actions/checkout@v6
