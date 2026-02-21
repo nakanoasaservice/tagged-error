@@ -14,7 +14,7 @@
     ]
   },
   "compilerOptions": {
-    "strictPropertyInitialization": false,
+    "strictPropertyInitialization": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

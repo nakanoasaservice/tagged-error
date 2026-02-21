@@ -33,9 +33,9 @@ interface TaggedErrorOptions<Cause = undefined> {
  */
 export class TaggedError<Tag extends string, Cause = undefined> extends Error {
   /** The tag identifying the type of error */
-  tag: Tag;
+  declare tag: Tag;
   /** The cause data associated with the error */
-  override cause: Cause;
+  declare cause: Cause;
 
   /**
    * Creates a new TaggedError instance
@@ -63,9 +63,6 @@ export class TaggedError<Tag extends string, Cause = undefined> extends Error {
 
     this.tag = tag;
     this.name = `TaggedError('${tag}')`;
-
-    if (options?.cause !== undefined) {
-      this.cause = options.cause;
-    }
+    this.cause = options?.cause as Cause;
   }
 }
