@@ -16,6 +16,8 @@ classes.
 
 ## Installation
 
+Requires ES2022 or later.
+
 Choose your preferred package manager:
 
 ```bash
@@ -112,10 +114,65 @@ new TaggedError(tag: string, options?: {
 
 #### Parameters
 
-- `tag`: A string literal that identifies the error type
+- `tag`: A string literal that identifies the error type (stored as a `readonly`
+  property)
 - `options`: Optional configuration object
   - `message`: Human-readable error message
-  - `cause`: Additional error context data
+  - `cause`: Additional error context data (non-enumerable, matching native
+    `Error` behavior)
+
+#### Properties
+
+- `tag` _(readonly)_: The string literal passed at construction, narrowed to its
+  exact type for use in `switch` statements
+- `cause`: The cause data passed in options. Non-enumerable — will not appear in
+  `JSON.stringify` or object spread
+- `name`: Computed as `TaggedError(TAG)` via a prototype getter —
+  non-enumerable, will not appear in `JSON.stringify` or object spread
+- `message`, `stack`: Inherited from `Error`
+
+## Migrating to v2
+
+### `error.name` format changed
+
+The tag is no longer wrapped in single quotes, and `name` is now a
+non-enumerable prototype getter.
+
+```ts
+// v1
+error.name === "TaggedError('MY_TAG')";
+
+// v2
+error.name === "TaggedError(MY_TAG)";
+```
+
+### `cause` and `name` are now non-enumerable
+
+Both `cause` and `name` now behave like native `Error` properties — they will
+not appear in `JSON.stringify` or object spread.
+
+```ts
+const err = new TaggedError("MY_TAG", { cause: { value: 42 } });
+
+// v1: {"tag":"MY_TAG","name":"TaggedError('MY_TAG')","cause":{"value":42}}
+// v2: {"tag":"MY_TAG"}
+JSON.stringify(err);
+
+// Access cause directly as before — no change needed
+err.cause.value; // 42
+```
+
+### `tag` is now `readonly`
+
+Assigning to `tag` after construction is now a compile-time error.
+
+### ES2022 or later is required
+
+Ensure your `tsconfig.json` targets ES2022 or later:
+
+```json
+{ "compilerOptions": { "target": "ES2022" } }
+```
 
 ## License
 
