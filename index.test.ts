@@ -8,7 +8,7 @@ Deno.test("TaggedError - basic instantiation", () => {
   assertInstanceOf(error, Error);
   assertInstanceOf(error, TaggedError);
   assertEquals(error.tag, "TEST_ERROR");
-  assertEquals(error.name, "TaggedError('TEST_ERROR')");
+  assertEquals(error.name, "TaggedError(TEST_ERROR)");
   assertEquals(error.message, "");
   assertEquals(error.cause, undefined);
 });
