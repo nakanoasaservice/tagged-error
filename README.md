@@ -117,7 +117,8 @@ new TaggedError(tag: string, options?: {
 - `tag`: A string literal that identifies the error type (stored as a `readonly`
   property)
 - `options`: Optional configuration object
-  - `message`: Human-readable error message
+  - `message`: Human-readable error message (non-enumerable, matching native
+    `Error` behavior)
   - `cause`: Additional error context data (non-enumerable, matching native
     `Error` behavior)
 
