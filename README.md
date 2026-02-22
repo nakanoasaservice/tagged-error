@@ -1,24 +1,151 @@
 # Tagged Error
 
-🏷️ Type-safe error handling in TypeScript without the hassle of custom error
-classes.
+Type-safe error handling for TypeScript — return errors instead of throwing
+them.
 
 [![npm version](https://badge.fury.io/js/@nakanoaas%2Ftagged-error.svg)](https://www.npmjs.com/package/@nakanoaas/tagged-error)
 [![JSR Version](https://jsr.io/badges/@nakanoaas/tagged-error)](https://jsr.io/@nakanoaas/tagged-error)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## The Problem with try/catch in TypeScript
+
+In TypeScript, `try/catch` has a fundamental limitation: **the caught value is
+always typed as `unknown`**.
+
+```typescript
+try {
+  const data = await fetchUser(id);
+} catch (e) {
+  // e is `unknown` — TypeScript has no idea what was thrown
+  console.error(e.message); // Error: Object is of type 'unknown'
+}
+```
+
+This means:
+
+- You must cast or narrow `e` manually before using it
+- The function signature gives no hint about what errors it might produce
+- Callers have no way to know what to handle — unless they read the source
+
+Even with custom error classes, `throw` cannot surface error types to callers.
+The errors a function may throw are invisible to its type signature.
+
+## The Idea: Return Errors, Don't Throw Them
+
+Tagged Error takes a different approach, inspired by Rust's `Result<T, E>`
+pattern: **treat errors as return values**.
+
+When a function returns a `TaggedError`, it becomes part of the function's
+return type. TypeScript can now see — and enforce — every possible outcome.
+
+```typescript
+// Return type is inferred as `User | TaggedError<"USER_NOT_FOUND">`
+function findUser(id: string) {
+  const user = db.users.findById(id);
+  if (!user) {
+    return new TaggedError("USER_NOT_FOUND", {
+      message: `No user with id "${id}"`,
+      cause: { id },
+    });
+  }
+  return user;
+}
+```
+
+The caller uses `instanceof` to narrow the type — TypeScript handles the rest:
+
+```typescript
+const result = findUser("u_123");
+
+if (result instanceof Error) {
+  // result is TaggedError<"USER_NOT_FOUND"> — fully typed
+  console.error(result.message);
+  console.error("Searched for id:", result.cause.id); // typed as string
+} else {
+  // result is User here
+  console.log(result.name);
+}
+```
+
+No `try/catch`. No type casting. No guessing.
+
+## Quick Start
+
+```typescript
+import { TaggedError } from "@nakanoaas/tagged-error";
+```
+
+### Step 1 — Define a function that returns errors
+
+```typescript
+function login(username: string, password: string) {
+  const user = db.users.findByUsername(username);
+
+  if (!user) {
+    return new TaggedError("USER_NOT_FOUND", {
+      message: `No account found for "${username}"`,
+    });
+  }
+
+  if (user.lockedUntil && user.lockedUntil > new Date()) {
+    return new TaggedError("ACCOUNT_LOCKED", {
+      message: "Account is temporarily locked",
+      cause: { lockedUntil: user.lockedUntil },
+    });
+  }
+
+  if (!verifyPassword(password, user.passwordHash)) {
+    return new TaggedError("WRONG_PASSWORD", {
+      message: "Incorrect password",
+      cause: { attemptsRemaining: user.maxAttempts - user.failedAttempts - 1 },
+    });
+  }
+
+  return { userId: user.id, token: generateToken(user) };
+}
+```
+
+### Step 2 — Handle the result with full type safety
+
+```typescript
+const result = login("alice", "hunter2");
+
+if (result instanceof Error) {
+  switch (result.tag) {
+    case "USER_NOT_FOUND":
+      console.error(result.message);
+      break;
+    case "ACCOUNT_LOCKED":
+      // result.cause.lockedUntil is typed as Date
+      console.error(
+        `Try again after ${result.cause.lockedUntil.toLocaleString()}`,
+      );
+      break;
+    case "WRONG_PASSWORD":
+      // result.cause.attemptsRemaining is typed as number
+      console.error(`${result.cause.attemptsRemaining} attempts remaining`);
+      break;
+  }
+} else {
+  // result is typed as { userId: string; token: string }
+  console.log("Logged in:", result.userId);
+}
+```
+
+TypeScript infers the union return type automatically. If you forget to handle
+an error case, the compiler will tell you.
+
 ## Features
 
-- 🎯 **Type-safe**: Full TypeScript support with type inference
-- 🪶 **Lightweight**: Zero dependencies, minimal code
-- 🔍 **Easy debugging**: Clear error messages with structured data
-- 💡 **Simple API**: No need to create custom error classes
+- **Type-safe**: Every error appears in the return type — no hidden throws
+- **No boilerplate**: No need to define custom error classes
+- **Structured**: Attach typed context data via `cause`
+- **Lightweight**: Zero dependencies, ~100 lines of source
+- **Compatible**: Extends native `Error` — works with existing tooling
 
 ## Installation
 
 Requires ES2022 or later.
-
-Choose your preferred package manager:
 
 ```bash
 npm install @nakanoaas/tagged-error    # npm
@@ -29,76 +156,9 @@ yarn add @nakanoaas/tagged-error       # yarn
 For Deno users (ESM only):
 
 ```bash
-deno add jsr:@nakanoaas/tagged-error   # deno
-npx jsr add @nakanoaas/tagged-error    # npm
+deno add jsr:@nakanoaas/tagged-error     # deno
+npx jsr add @nakanoaas/tagged-error      # npm
 pnpm dlx jsr add @nakanoaas/tagged-error # pnpm
-```
-
-## Quick Start
-
-```typescript
-import { TaggedError } from "@nakanoaas/tagged-error";
-
-// Example: A function that might fail in different ways
-function divideAndSquareRoot(num: number, divisor: number) {
-  if (divisor === 0) {
-    return new TaggedError("DIVISOR_IS_ZERO", {
-      message: "Cannot divide by zero",
-    });
-  }
-
-  const result = num / divisor;
-
-  if (result < 0) {
-    return new TaggedError("NEGATIVE_RESULT", {
-      message: "Cannot calculate square root of negative number",
-      cause: { value: result },
-    });
-  }
-
-  return Math.sqrt(result);
-}
-
-// Using the function
-const result = divideAndSquareRoot(10, 0);
-
-// Type-safe error handling
-if (result instanceof TaggedError) {
-  switch (result.tag) {
-    case "DIVISOR_IS_ZERO":
-      console.error("Division by zero error:", result.message);
-      break;
-    case "NEGATIVE_RESULT":
-      console.error(
-        "Negative result error:",
-        result.message,
-        "Value:",
-        result.cause.value,
-      );
-      break;
-  }
-} else {
-  console.log("Result:", result); // result is typed as number
-}
-```
-
-## Why Tagged Error?
-
-Traditional error handling in TypeScript often involves creating multiple error
-classes or using string literals. Tagged Error provides a simpler approach:
-
-```typescript
-// ❌ Traditional approach - lots of boilerplate
-class DivisorZeroError extends Error {
-  constructor() {
-    super("Cannot divide by zero");
-  }
-}
-
-// ✅ Tagged Error approach - clean and type-safe
-return new TaggedError("DIVISOR_IS_ZERO", {
-  message: "Cannot divide by zero",
-});
 ```
 
 ## API Reference
@@ -124,13 +184,21 @@ new TaggedError(tag: string, options?: {
 
 #### Properties
 
-- `tag` _(readonly)_: The string literal passed at construction, narrowed to its
-  exact type for use in `switch` statements
-- `cause`: The cause data passed in options. Non-enumerable — will not appear in
-  `JSON.stringify` or object spread
-- `name`: Computed as `TaggedError(TAG)` via a prototype getter —
-  non-enumerable, will not appear in `JSON.stringify` or object spread
-- `message`, `stack`: Inherited from `Error`
+| Property  | Type     | Enumerable | Description                                         |
+| --------- | -------- | ---------- | --------------------------------------------------- |
+| `tag`     | `Tag`    | Yes        | The string literal passed at construction           |
+| `cause`   | `Cause`  | No         | Context data; excluded from `JSON.stringify`        |
+| `name`    | `string` | No         | Computed as `TaggedError(TAG)` via prototype getter |
+| `message` | `string` | No         | Inherited from `Error`                              |
+| `stack`   | `string` | No         | Inherited from `Error`                              |
+
+`JSON.stringify` will only include `tag`:
+
+```typescript
+const err = new TaggedError("MY_TAG", { cause: { value: 42 } });
+JSON.stringify(err); // '{"tag":"MY_TAG"}'
+err.cause.value; // 42
+```
 
 ## Migrating to v2
 
