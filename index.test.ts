@@ -1,6 +1,7 @@
 import { assertEquals, assertInstanceOf } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
 import { TaggedError } from "./index.ts";
+import { assertType, type IsExact } from "@std/testing/types";
 
 Deno.test("TaggedError - basic instantiation", () => {
   const error = new TaggedError("TEST_ERROR");
@@ -11,6 +12,7 @@ Deno.test("TaggedError - basic instantiation", () => {
   assertEquals(error.name, "TaggedError(TEST_ERROR)");
   assertEquals(error.message, "");
   assertEquals(error.cause, undefined);
+  assertType<IsExact<typeof error, TaggedError<"TEST_ERROR", undefined>>>(true);
 });
 
 Deno.test("TaggedError - with message", () => {
@@ -19,6 +21,7 @@ Deno.test("TaggedError - with message", () => {
 
   assertEquals(error.message, errorMessage);
   assertEquals(error.tag, "TEST_ERROR");
+  assertType<IsExact<typeof error, TaggedError<"TEST_ERROR", undefined>>>(true);
 });
 
 Deno.test("TaggedError - with cause data", () => {
@@ -31,6 +34,12 @@ Deno.test("TaggedError - with cause data", () => {
   assertEquals(error.tag, "VALIDATION_ERROR");
   assertEquals(error.message, "Invalid input");
   assertEquals(error.cause, causeData);
+  assertType<
+    IsExact<
+      typeof error,
+      TaggedError<"VALIDATION_ERROR", { field: string; value: string }>
+    >
+  >(true);
 });
 
 Deno.test("TaggedError - should set falsy cause values (0/empty string/false/null)", () => {
