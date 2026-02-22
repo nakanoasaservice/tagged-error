@@ -61,10 +61,11 @@ if (result instanceof Error) {
   // result is TaggedError<"USER_NOT_FOUND"> — fully typed
   console.error(result.message);
   console.error("Searched for id:", result.cause.id); // typed as string
-} else {
-  // result is User here
-  console.log(result.name);
+  return;
 }
+
+// result is User here
+console.log(result.name);
 ```
 
 No `try/catch`. No type casting. No guessing.
@@ -126,10 +127,11 @@ if (result instanceof Error) {
       console.error(`${result.cause.attemptsRemaining} attempts remaining`);
       break;
   }
-} else {
-  // result is typed as { userId: string; token: string }
-  console.log("Logged in:", result.userId);
+  return;
 }
+
+// result is typed as { userId: string; token: string }
+console.log("Logged in:", result.userId);
 ```
 
 TypeScript infers the union return type automatically. If you forget to handle
