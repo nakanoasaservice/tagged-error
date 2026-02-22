@@ -25,20 +25,25 @@ interface TaggedErrorOptions<Cause = undefined> {
  * @template Cause - The type of the cause data
  * @example
  * ```ts
- * const result = divideAndSquareRoot(10, 0);
+ * const result = login("alice", "hunter2");
  *
- * if (result instanceof TaggedError) {
+ * if (result instanceof Error) {
  *   switch (result.tag) {
- *     case "DIVIDE_BY_ZERO":
- *       console.log("Cannot divide by zero");
+ *     case "USER_NOT_FOUND":
+ *       console.error(result.message);
  *       break;
- *     case "NEGATIVE_RESULT":
- *       console.log(`Cannot square root ${result.cause.value}`);
+ *     case "ACCOUNT_LOCKED":
+ *       console.error(`Try again after ${result.cause.lockedUntil.toLocaleString()}`);
+ *       break;
+ *     case "WRONG_PASSWORD":
+ *       console.error(`${result.cause.attemptsRemaining} attempts remaining`);
  *       break;
  *   }
- * } else {
- *   console.log("Result:", result); // result is typed as number
+ *   return;
  * }
+ *
+ * // result is typed as { userId: string; token: string }
+ * console.log("Logged in:", result.userId);
  * ```
  */
 export class TaggedError<Tag extends string, Cause = undefined> extends Error {
