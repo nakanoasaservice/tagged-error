@@ -1,6 +1,7 @@
 import { assertEquals, assertInstanceOf } from "@std/assert";
 import { describe, it } from "@std/testing/bdd";
 import { TaggedError } from "./index.ts";
+import { assertType, type IsExact } from "@std/testing/types";
 
 Deno.test("TaggedError - basic instantiation", () => {
   const error = new TaggedError("TEST_ERROR");
@@ -8,9 +9,10 @@ Deno.test("TaggedError - basic instantiation", () => {
   assertInstanceOf(error, Error);
   assertInstanceOf(error, TaggedError);
   assertEquals(error.tag, "TEST_ERROR");
-  assertEquals(error.name, "TaggedError('TEST_ERROR')");
+  assertEquals(error.name, "TaggedError(TEST_ERROR)");
   assertEquals(error.message, "");
   assertEquals(error.cause, undefined);
+  assertType<IsExact<typeof error, TaggedError<"TEST_ERROR", undefined>>>(true);
 });
 
 Deno.test("TaggedError - with message", () => {
@@ -19,6 +21,7 @@ Deno.test("TaggedError - with message", () => {
 
   assertEquals(error.message, errorMessage);
   assertEquals(error.tag, "TEST_ERROR");
+  assertType<IsExact<typeof error, TaggedError<"TEST_ERROR", undefined>>>(true);
 });
 
 Deno.test("TaggedError - with cause data", () => {
@@ -31,6 +34,12 @@ Deno.test("TaggedError - with cause data", () => {
   assertEquals(error.tag, "VALIDATION_ERROR");
   assertEquals(error.message, "Invalid input");
   assertEquals(error.cause, causeData);
+  assertType<
+    IsExact<
+      typeof error,
+      TaggedError<"VALIDATION_ERROR", { field: string; value: string }>
+    >
+  >(true);
 });
 
 Deno.test("TaggedError - should set falsy cause values (0/empty string/false/null)", () => {
@@ -100,6 +109,59 @@ describe("TaggedError in practice", () => {
     );
     assertEquals(result.cause?.value, -10);
   });
+});
+
+// Property attribute tests
+Deno.test("TaggedError - tag is enumerable", () => {
+  const error = new TaggedError("TEST_ERROR", { cause: { value: 1 } });
+  const descriptor = Object.getOwnPropertyDescriptor(error, "tag");
+
+  assertEquals(descriptor?.enumerable, true);
+});
+
+Deno.test("TaggedError - cause is non-enumerable", () => {
+  const error = new TaggedError("TEST_ERROR", { cause: { value: 1 } });
+  const descriptor = Object.getOwnPropertyDescriptor(error, "cause");
+
+  assertEquals(descriptor?.enumerable, false);
+});
+
+Deno.test("TaggedError - cause property exists even when not specified", () => {
+  const error = new TaggedError("TEST_ERROR");
+
+  assertEquals(Object.hasOwn(error, "cause"), true);
+  assertEquals(error.cause, undefined);
+});
+
+Deno.test("TaggedError - name is a non-enumerable prototype getter", () => {
+  const instanceDescriptor = Object.getOwnPropertyDescriptor(
+    new TaggedError("TEST_ERROR"),
+    "name",
+  );
+  assertEquals(instanceDescriptor, undefined);
+
+  const protoDescriptor = Object.getOwnPropertyDescriptor(
+    TaggedError.prototype,
+    "name",
+  );
+  assertEquals(typeof protoDescriptor?.get, "function");
+  assertEquals(protoDescriptor?.enumerable, false);
+});
+
+Deno.test("TaggedError - message is non-enumerable", () => {
+  const error = new TaggedError("TEST_ERROR", { message: "hello" });
+  const descriptor = Object.getOwnPropertyDescriptor(error, "message");
+
+  assertEquals(descriptor?.enumerable, false);
+});
+
+Deno.test("TaggedError - JSON.stringify includes only tag", () => {
+  const error = new TaggedError("TEST_ERROR", {
+    message: "hello",
+    cause: { value: 1 },
+  });
+
+  assertEquals(JSON.stringify(error), '{"tag":"TEST_ERROR"}');
 });
 
 // Type safety tests

@@ -3,9 +3,19 @@
  * @template Cause - The type of the cause data
  */
 interface TaggedErrorOptions<Cause = undefined> {
-  /** Optional error message */
+  /**
+   * Optional error message.
+   *
+   * Stored as a non-enumerable property — does not appear in `JSON.stringify`
+   * or object spread. Access it directly via `err.message`.
+   */
   message?: string;
-  /** Optional cause data */
+  /**
+   * Optional cause data.
+   *
+   * Stored as a non-enumerable property — does not appear in `JSON.stringify`
+   * or object spread. Access it directly via `err.cause`.
+   */
   cause?: Cause;
 }
 
@@ -32,10 +42,30 @@ interface TaggedErrorOptions<Cause = undefined> {
  * ```
  */
 export class TaggedError<Tag extends string, Cause = undefined> extends Error {
-  /** The tag identifying the type of error */
-  declare tag: Tag;
-  /** The cause data associated with the error */
+  /**
+   * The tag identifying the type of error.
+   *
+   * Enumerable (appears in `JSON.stringify` and object spread).
+   */
+  declare readonly tag: Tag;
+
+  /**
+   * The cause data associated with the error.
+   *
+   * Non-enumerable — does not appear in `JSON.stringify` or object spread.
+   * Access it directly via `err.cause`.
+   */
   declare cause: Cause;
+
+  /**
+   * A human-readable name for the error, formatted as `TaggedError(TAG)`.
+   *
+   * Non-enumerable (defined as a prototype getter) — does not appear in
+   * `JSON.stringify` or object spread.
+   */
+  override get name(): string {
+    return `TaggedError(${this.tag})`;
+  }
 
   /**
    * Creates a new TaggedError instance
@@ -59,10 +89,7 @@ export class TaggedError<Tag extends string, Cause = undefined> extends Error {
     tag: Tag,
     options?: TaggedErrorOptions<Cause>,
   ) {
-    super(options?.message);
-
+    super(options?.message, { cause: options?.cause });
     this.tag = tag;
-    this.name = `TaggedError('${tag}')`;
-    this.cause = options?.cause as Cause;
   }
 }
