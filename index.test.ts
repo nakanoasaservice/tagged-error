@@ -102,6 +102,59 @@ describe("TaggedError in practice", () => {
   });
 });
 
+// Property attribute tests
+Deno.test("TaggedError - tag is enumerable", () => {
+  const error = new TaggedError("TEST_ERROR", { cause: { value: 1 } });
+  const descriptor = Object.getOwnPropertyDescriptor(error, "tag");
+
+  assertEquals(descriptor?.enumerable, true);
+});
+
+Deno.test("TaggedError - cause is non-enumerable", () => {
+  const error = new TaggedError("TEST_ERROR", { cause: { value: 1 } });
+  const descriptor = Object.getOwnPropertyDescriptor(error, "cause");
+
+  assertEquals(descriptor?.enumerable, false);
+});
+
+Deno.test("TaggedError - cause property exists even when not specified", () => {
+  const error = new TaggedError("TEST_ERROR");
+
+  assertEquals(Object.hasOwn(error, "cause"), true);
+  assertEquals(error.cause, undefined);
+});
+
+Deno.test("TaggedError - name is a non-enumerable prototype getter", () => {
+  const instanceDescriptor = Object.getOwnPropertyDescriptor(
+    new TaggedError("TEST_ERROR"),
+    "name",
+  );
+  assertEquals(instanceDescriptor, undefined);
+
+  const protoDescriptor = Object.getOwnPropertyDescriptor(
+    TaggedError.prototype,
+    "name",
+  );
+  assertEquals(typeof protoDescriptor?.get, "function");
+  assertEquals(protoDescriptor?.enumerable, false);
+});
+
+Deno.test("TaggedError - message is non-enumerable", () => {
+  const error = new TaggedError("TEST_ERROR", { message: "hello" });
+  const descriptor = Object.getOwnPropertyDescriptor(error, "message");
+
+  assertEquals(descriptor?.enumerable, false);
+});
+
+Deno.test("TaggedError - JSON.stringify includes only tag", () => {
+  const error = new TaggedError("TEST_ERROR", {
+    message: "hello",
+    cause: { value: 1 },
+  });
+
+  assertEquals(JSON.stringify(error), '{"tag":"TEST_ERROR"}');
+});
+
 // Type safety tests
 Deno.test("TaggedError - type narrowing with instanceof", () => {
   function processResult(
