@@ -1,7 +1,7 @@
 import { assertEquals, assertInstanceOf } from "@std/assert";
+import { assertType, type IsExact } from "@std/testing/types";
 import { describe, it } from "@std/testing/bdd";
 import { TaggedError } from "./index.ts";
-import { assertType, type IsExact } from "@std/testing/types";
 
 Deno.test("TaggedError - basic instantiation", () => {
   const error = new TaggedError("TEST_ERROR");
