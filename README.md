@@ -266,3 +266,7 @@ Tests include compile-time assertions. `pnpm build` produces ESM, CommonJS,
 and declarations in `dist/`, and generates `jsr.json` from `package.json`.
 No separate Deno installation is required. The JSR CLI manages its own
 validation binary; JSR distribution is retained.
+
+Update Vite+ and its bundled tools together with `vp migrate`, then update the
+pinned `setup-vp` version in CI and refresh the pnpm lockfile. Run the project's
+checks before committing toolchain updates.
