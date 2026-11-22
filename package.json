@@ -1,0 +1,53 @@
+{
+  "name": "@nakanoaas/tagged-error",
+  "version": "2.0.1",
+  "description": "A type-safe error handling solution without custom error classes.",
+  "bugs": {
+    "url": "https://github.com/nakanoasaservice/tagged-error/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nakanoasaservice/tagged-error.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "check": "vp check",
+    "check:fix": "vp check --fix",
+    "test": "vp test run --typecheck",
+    "build": "vp pack",
+    "jsr:dry-run": "vp pack && jsr publish --dry-run"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "jsr": "0.14.3",
+    "typescript": "^7.0.2",
+    "vite-plus": "1.7.0"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.22.1"
+    }
+  },
+  "packageManager": "pnpm@12.21.0"
+}

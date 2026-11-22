@@ -248,3 +248,40 @@ Ensure your `tsconfig.json` targets ES2022 or later:
 ## License
 
 MIT © [Nakano as a Service](https://github.com/nakanoasaservice)
+
+## Development
+
+Use Node.js 24 and the pnpm version pinned in `package.json`.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm check
+pnpm test
+pnpm build
+pnpm jsr:dry-run
+```
+
+Vite+ runs formatting, linting, type checks, tests, and library builds.
+Tests include compile-time assertions. `pnpm build` produces ESM, CommonJS,
+and declarations in `dist/`, and generates `jsr.json` from `package.json`.
+No separate Deno installation is required. The JSR CLI manages its own
+validation binary; JSR distribution is retained.
+
+Update Vite+ and its bundled tools together with `vp migrate`, then refresh the
+pnpm lockfile. CI resolves the Vite+ version from the project dependency or catalog
+automatically. Run the project's checks before committing toolchain updates.
+
+### Runtime versions
+
+`package.json` is the source of truth for development Node.js (`devEngines.runtime`)
+and pnpm (`packageManager`). The major versions in `mise.toml` only bootstrap the
+environment. Install the [global Vite+ CLI](https://viteplus.dev/guide/global-cli)
+with environment management enabled, then use `vp install --frozen-lockfile`
+and `vp run <script>` to run with the declared versions. `pnpm` commands also use
+them when the Vite+ shims are active. The project-local CLI alone does not switch
+Node.js versions.
+
+CI reads the same manifest automatically; compatibility-test matrices explicitly
+override Node.js. pnpm runtime management is disabled so it does not override
+Vite+'s selection. Keep any consumer-facing `engines.node` support range separate
+from the development pin.
