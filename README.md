@@ -248,3 +248,21 @@ Ensure your `tsconfig.json` targets ES2022 or later:
 ## License
 
 MIT © [Nakano as a Service](https://github.com/nakanoasaservice)
+
+## Development
+
+Use Node.js 24 and the pnpm version pinned in `package.json`.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm check
+pnpm test
+pnpm build
+pnpm jsr:dry-run
+```
+
+Vite+ runs formatting, linting, type checks, tests, and library builds.
+Tests include compile-time assertions. `pnpm build` produces ESM, CommonJS,
+and declarations in `dist/`, and generates `jsr.json` from `package.json`.
+No separate Deno installation is required. The JSR CLI manages its own
+validation binary; JSR distribution is retained.

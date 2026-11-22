@@ -90,10 +90,7 @@ export class TaggedError<Tag extends string, Cause = undefined> extends Error {
    * });
    * ```
    */
-  constructor(
-    tag: Tag,
-    options?: TaggedErrorOptions<Cause>,
-  ) {
+  constructor(tag: Tag, options?: TaggedErrorOptions<Cause>) {
     super(options?.message, { cause: options?.cause });
     this.tag = tag;
   }

@@ -16,3 +16,11 @@ updates:
       github-actions:
         patterns:
           - "*"
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      vite-plus:
+        patterns:
+          ["vite-plus", "vite", "vitest", "@voidzero-dev/vite-plus-core"]
