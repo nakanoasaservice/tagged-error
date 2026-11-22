@@ -19,6 +19,10 @@ jobs:
           version: "1.7.0"
           node-version-file: .node-version
           cache: true
+          run-install: false
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Check formatting, lint and types
         run: vp check
