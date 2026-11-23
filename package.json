@@ -38,7 +38,7 @@
     "jsr:dry-run": "vp pack && jsr publish --dry-run"
   },
   "devDependencies": {
-    "@types/node": "^24.0.0",
+    "@types/node": "^26.6.6",
     "jsr": "0.14.3",
     "typescript": "^7.0.2",
     "vite-plus": "1.7.0"
